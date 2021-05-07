@@ -1,0 +1,33 @@
+name: Plan
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  plan:
+    runs-on: 
+      - self-hosted
+      - tsa
+      - kroger
+    strategy:
+      matrix:
+        env:
+          - dev
+          - test
+          - stage
+          - prod
+        region: 
+          - us_central1
+          - us_east1
+    steps:
+    - name: 'Checkout self repo'
+      uses: actions/checkout@v2
+    - name: 'Git Diff'
+      uses: marceloprado/has-changed-path@v1
+        id: ${{ matrix.env }}-${{ matrix.region }}-changed
+        with:
+          paths: environments/${{ matrix.env }}_${{ matrix.region }} .github/workflows/plan.yml
+    - name: 'Terraform plan'
+      if: steps.${{ matrix.env }}-${{ matrix.region }}-changed.outputs.changed == 'true'
+      uses: actions/checkout@v2
+      run: |
+        cat environments/${{ matrix.env }}_${{ matrix.region }}/main.txt
