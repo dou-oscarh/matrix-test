@@ -5,9 +5,7 @@ on:
 jobs:
   plan:
     runs-on: 
-      - self-hosted
-      - tsa
-      - kroger
+      - ubuntu-latest
     strategy:
       matrix:
         env:
@@ -23,7 +21,7 @@ jobs:
       uses: actions/checkout@v2
     - name: 'Git Diff'
       uses: marceloprado/has-changed-path@v1
-        id: ${{ matrix.env }}-${{ matrix.region }}-changed
+        id: "${{ matrix.env }}-${{ matrix.region }}-changed"
         with:
           paths: environments/${{ matrix.env }}_${{ matrix.region }} .github/workflows/plan.yml
     - name: 'Terraform plan'
