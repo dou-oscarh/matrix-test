@@ -5,9 +5,7 @@ on:
 jobs:
   plan:
     runs-on: 
-      - self-hosted
-      - tsa
-      - kroger
+      - ubuntu-latest
     strategy:
       matrix:
         env:
